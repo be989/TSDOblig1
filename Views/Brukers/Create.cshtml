@@ -1,0 +1,43 @@
+@model TSDOblig1.Models.Bruker
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Bruker</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Navn" class="control-label"></label>
+                <input asp-for="Navn" class="form-control" />
+                <span asp-validation-for="Navn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KontaktInfo" class="control-label"></label>
+                <input asp-for="KontaktInfo" class="form-control" />
+                <span asp-validation-for="KontaktInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AntallSpill" class="control-label"></label>
+                <input asp-for="AntallSpill" class="form-control" />
+                <span asp-validation-for="AntallSpill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
