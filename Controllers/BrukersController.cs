@@ -99,6 +99,27 @@ namespace TSDOblig1.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public IActionResult IncrementGameCount(string playerName)
+        {
+            if (string.IsNullOrEmpty(playerName))
+            {
+                return BadRequest("Må oppgi brukernavn");
+            }
+
+            // Søker uavhengig av store/små bokstaver:
+            var bruker = _context.Brukere
+                .FirstOrDefault(b => b.Navn.ToLower() == playerName.ToLower());
+
+            if (bruker != null)
+            {
+                bruker.AntallSpill += 1;
+                _context.SaveChanges();
+                return Ok();
+            }
+
+            return NotFound("Bruker ikke funnet");
+        }
 
         private bool BrukerExists(int id)
         {

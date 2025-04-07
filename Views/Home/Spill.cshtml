@@ -24,13 +24,24 @@
         display: none;
     }
 </style>
+<form id="playerForm" style="margin-bottom:1em;">
+    <label for="playerName">Spill som bruker:</label>
+    <input type="text" id="playerName" name="playerName" placeholder="Skriv ditt navn her" />
+</form>
+
+
 
 <table id="colorTable"></table>
 <div class="counter">Antall celler fjernet: <span id="removedCount">0</span></div>
 <div class="message" id="gameMessage"></div>
 <div class="restart">
+    
     <button id="restartButton">Spill på nytt</button>
 </div>
+<p id="completionMessage" style="display:none; font-weight:bold; font-size:1.2em; color: green;">
+    Spillet er ferdig!
+</p>
+
 
 @section Scripts {
     <script>
@@ -80,7 +91,20 @@
                     if (removedCount === 16) {
                         gameMessageElement.textContent = "Spillet er ferdig!";
                         restartDiv.style.display = "block";
-                    }
+                        document.getElementById("completionMessage").style.display = "block";
+
+                         var playerName = document.getElementById("playerName").value;
+                         if (playerName) {
+                           fetch("/Brukers/IncrementGameCount", {
+                                 method: "POST",
+                                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                                 body: "playerName=" + encodeURIComponent(playerName)
+                            }).then(response => {
+                                console.log("✅ AntallSpill oppdatert for bruker:", playerName);
+                            }).catch(err => console.error("❌ Kunne ikke oppdatere AntallSpill", err));
+                        }
+                }
+
                 }
                 firstClickedCell.style.outline = "none";
                 firstClickedCell = null;
