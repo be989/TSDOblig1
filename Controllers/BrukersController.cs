@@ -125,5 +125,15 @@ namespace TSDOblig1.Controllers
         {
             return _context.Brukere.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> Rangering()
+        {
+            var brukere = await _context.Brukere
+                .OrderByDescending(b => b.AntallSpill)
+                .ToListAsync();
+
+            return View(brukere);
+        }
+
     }
 }

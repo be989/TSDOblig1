@@ -1,0 +1,27 @@
+@model IEnumerable<TSDOblig1.Models.Bruker>
+
+@{
+    ViewData["Title"] = "Rangering";
+}
+
+<h1 class="text-center">Rangert liste over brukere</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Navn</th>
+            <th>KontaktInfo</th>
+            <th>Antall Spill</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.Navn</td>
+                <td>@b.KontaktInfo</td>
+                <td>@b.AntallSpill</td>
+            </tr>
+        }
+    </tbody>
+</table>
