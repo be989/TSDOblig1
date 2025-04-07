@@ -1,0 +1,100 @@
+@{
+    ViewData["Title"] = "Spill 2-like";
+}
+
+<h1 class="text-center">Spill: 2-like Memory Game</h1>
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin: 20px auto;
+    }
+    td {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #000;
+        cursor: pointer;
+    }
+    .counter, .message, .restart {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .restart {
+        display: none;
+    }
+</style>
+
+<table id="colorTable"></table>
+<div class="counter">Antall celler fjernet: <span id="removedCount">0</span></div>
+<div class="message" id="gameMessage"></div>
+<div class="restart">
+    <button id="restartButton">Spill på nytt</button>
+</div>
+
+@section Scripts {
+    <script>
+        const colors = ["red", "red", "blue", "blue", "yellow", "yellow", "green", "green", "purple", "purple", "orange", "orange", "pink", "pink", "cyan", "cyan"];
+        const table = document.getElementById("colorTable");
+        const removedCountElement = document.getElementById("removedCount");
+        const gameMessageElement = document.getElementById("gameMessage");
+        const restartButton = document.getElementById("restartButton");
+        const restartDiv = document.querySelector(".restart");
+        let firstClickedCell = null;
+        let removedCount = 0;
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function initializeTable() {
+            table.innerHTML = "";
+            shuffle(colors);
+            let colorIndex = 0;
+            for (let i = 0; i < 4; i++) {
+                const row = document.createElement("tr");
+                for (let j = 0; j < 4; j++) {
+                    const cell = document.createElement("td");
+                    cell.style.backgroundColor = colors[colorIndex++];
+                    cell.addEventListener("click", handleCellClick);
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+        }
+
+        function handleCellClick(event) {
+            const cell = event.target;
+            if (firstClickedCell === null) {
+                firstClickedCell = cell;
+                cell.style.outline = "2px solid black";
+            } else {
+                if (firstClickedCell.style.backgroundColor === cell.style.backgroundColor) {
+                    firstClickedCell.style.backgroundColor = "transparent";
+                    cell.style.backgroundColor = "transparent";
+                    removedCount += 2;
+                    removedCountElement.textContent = removedCount;
+                    if (removedCount === 16) {
+                        gameMessageElement.textContent = "Spillet er ferdig!";
+                        restartDiv.style.display = "block";
+                    }
+                }
+                firstClickedCell.style.outline = "none";
+                firstClickedCell = null;
+            }
+        }
+
+        restartButton.addEventListener("click", function () {
+            removedCount = 0;
+            removedCountElement.textContent = removedCount;
+            gameMessageElement.textContent = "";
+            restartDiv.style.display = "none";
+            initializeTable();
+        });
+
+        initializeTable();
+    </script>
+}
